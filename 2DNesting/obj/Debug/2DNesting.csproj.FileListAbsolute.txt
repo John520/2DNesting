@@ -1,0 +1,10 @@
+F:\VS\c#\2DNesting\2DNesting\bin\Debug\2DNesting.exe.config
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\bin\Debug\2DNesting.exe.config
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\2DNesting.csprojResolveAssemblyReference.cache
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\_2DNesting.Form1.resources
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\_2DNesting.Properties.Resources.resources
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\2DNesting.csproj.GenerateResource.Cache
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\bin\Debug\2DNesting.exe
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\bin\Debug\2DNesting.pdb
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\2DNesting.exe
+H:\排样算法\2DNesting-2D\2DNesting\2DNesting\obj\Debug\2DNesting.pdb
