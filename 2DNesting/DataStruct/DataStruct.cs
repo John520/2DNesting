@@ -95,6 +95,20 @@ namespace _2DNesting.DataStruct
             temp.y = temp.y + offsetY;
             current.Value = temp;
         }
+
+        public double Area()//用正负梯形分割法求面积
+        {
+            double area = 0.0;
+            LinkedListNode<Point> current = this.vertex.First;
+            while (current != this.vertex.Last)
+            {
+                //若边的起点x值大于边的终点x值，面积为正
+                area = area + (current.Value.y + current.Next.Value.y) * (current.Value.x - current.Next.Value.x) / 2;
+                current = current.Next;
+            }
+            area = area + (current.Value.y + this.vertex.First.Value.y) * (current.Value.x - this.vertex.First.Value.x) / 2;
+            return area;
+        }
         public void Rotate(int angle)
         {
             if (angle == 180)//逆时针转动180度
@@ -119,6 +133,21 @@ namespace _2DNesting.DataStruct
                 throw new Exception("使用Rotate函数，参数只能为180");
         }
     
+    }
+    public struct Rectangle
+    {
+        public Rectangle(Point min, Point max)
+        {
+            this.min = min;
+            this.max = max;
+        }
+        public Point min;
+        public Point max;
+        public double Area() {
+
+            return (max.y -min.y) * (max.x - min.x);
+        }
+
     }
       public struct Piece
     {

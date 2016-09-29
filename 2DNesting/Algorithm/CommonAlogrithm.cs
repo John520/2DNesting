@@ -23,6 +23,9 @@ namespace _2DNesting.Algorithm
             double y2 = b.endPoint.y - b.startPoint.y;
             return x1 * y2 - x2 * y1;
         }
+       
+
+
         public static bool IsConvex(Polygon p)
         {
             int num = p.vertex.Count;//顶点个数
@@ -30,13 +33,81 @@ namespace _2DNesting.Algorithm
             for (int vertexIndex = 0; vertexIndex < num; vertexIndex++)
             {
                 LinkedListNode<Point> temp = NextPoint(current, p.vertex);
-                if (cross(new Line(current.Value, temp.Value),
+                if (CrossDirection(new Line(current.Value, temp.Value),
                                             new Line(temp.Value, NextPoint(temp, p.vertex).Value)) == 2)
                     return false;
                 current = NextPoint(current, p.vertex);
             }
             return true;
         }
+
+        //求多边形的包络矩形——注意这里求的不一定是最小包络矩形！
+        public static Rectangle Enclosure(Polygon p)
+        {
+            LinkedListNode<Point> current = p.vertex.First;
+            double minX = current.Value.x;
+            double minY = current.Value.y;
+            double maxX = current.Value.x;
+            double maxY = current.Value.y;
+            current = current.Next;
+            while (current != null)
+            {
+                if (current.Value.x < minX)
+                    minX = current.Value.x;
+                if (current.Value.y < minY)
+                    minY = current.Value.y;
+                if (current.Value.x > maxX)
+                    maxX = current.Value.x;
+                if (current.Value.y > maxY)
+                    maxY = current.Value.y;
+                current = current.Next;
+            }
+            return new Rectangle(new Point(minX, minY), new Point(maxX, maxY));
+        }
+        public static Rectangle Enclosure(Polygon a,Polygon b)
+        {
+            LinkedListNode<Point> current = a.vertex.First;
+            double minX = current.Value.x;
+            double minY = current.Value.y;
+            double maxX = current.Value.x;
+            double maxY = current.Value.y;
+            current = current.Next;
+            while (current != null)
+            {
+                if (current.Value.x < minX)
+                    minX = current.Value.x;
+                if (current.Value.y < minY)
+                    minY = current.Value.y;
+                if (current.Value.x > maxX)
+                    maxX = current.Value.x;
+                if (current.Value.y > maxY)
+                    maxY = current.Value.y;
+                current = current.Next;
+            }
+            current = b.vertex.First;
+            while (current != null)
+            {
+                if (current.Value.x < minX)
+                    minX = current.Value.x;
+                if (current.Value.y < minY)
+                    minY = current.Value.y;
+                if (current.Value.x > maxX)
+                    maxX = current.Value.x;
+                if (current.Value.y > maxY)
+                    maxY = current.Value.y;
+                current = current.Next;
+            }
+
+
+
+
+            return new Rectangle(new Point(minX, minY), new Point(maxX, maxY));
+        }
+
+
+
+
+
         public static Polygon CopyPolygon(Polygon polygon)
         {
             LinkedList<Point> list = new LinkedList<Point>();
@@ -913,7 +984,8 @@ namespace _2DNesting.Algorithm
             } while (!IsSamePoint(list.First<Point>(), list.Last<Point>()));
 
             list.RemoveLast();//第一点和最后一点相同，移除最后一点
-            return MergePolygon(new Polygon(list));
+           // return MergePolygon(new Polygon(list));
+            return new Polygon(list);
         }
 
         public static bool IsSameLineT(Line line1, Line line2)  //该函数与师兄的不同，所以加了一个T
@@ -1703,6 +1775,57 @@ namespace _2DNesting.Algorithm
                
             }
             return sum % 2 == 1 ? 1 : -1;
+        
+        }
+        
+ /*************************************************** 计算两个多边形的利用率 ****************/
+        public static double Utilization(Polygon a, Polygon b)
+        { 
+            double area_a=a.Area();
+            double area_b=b.Area();
+
+            Rectangle rect = Enclosure(a, b);
+
+            return (area_a + area_b) / rect.Area();
+        
+        }
+   
+
+
+        /// <summary>
+        /// 获得最优的利用率
+        /// 多边形b绕着多边形a
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="p">最佳接触点</param>
+        /// <returns></returns>
+        public static double GetBestContact(Polygon a, Polygon b, Point p)
+        {
+            Point bestPoint = new Point();
+            double bestValue = 0;
+            List<Polygon> nfps = getNfp(a, b);
+            Point b_ref = LowLeftPoint(b);
+            for (int i = 0; i < nfps.Count; i++)
+            {
+                LinkedListNode<Point> pNode=nfps[i].vertex.First;
+                for (int j = 0; j < nfps[i].vertex.Count; j++)
+                { 
+                    Point end=pNode.Value;
+                    b.Move(b_ref, end);
+                    double value = Utilization(a, b);
+                    if (value > bestValue)
+                    {
+                        bestPoint = end;
+                        bestValue = value;
+                    }
+                    pNode=pNode.Next;
+                    b_ref = end;
+                
+                }
+            }
+            p = bestPoint;
+            return bestValue;
         
         }
 
